@@ -1,17 +1,24 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, m, a, b, mc;
-vector<int> adj[10003];
-int result[10003];
+int n, m, a, b, mx;
 int visited[10003];
+int result[10003];
+vector<int> adj[10003];
+
+
 int dfs(int here){
+
     int ret=1;
-    for(int there :adj[here]){
-        if(visited[there]) continue;
-        visited[there] = 1;
-        ret += dfs(there);
+    visited[here]=1;
+    for(int there: adj[here]){
+        if(!visited[there]){
+            ret+=dfs(there);
+        }
     }
+     //ret=1이란 소리는 위에 for문에서 자식 노드를 방문하지 않았다는 뜻이므로
+    if(ret==1) return 1;
+
     return ret;
 }
 
@@ -21,22 +28,20 @@ int main(){
 
     cin >> n >> m;
 
-    for(int i=1; i<= m; i++){
+    for(int i=0; i<m; i++){
         cin >> a >> b;
         adj[b].push_back(a);
     }
 
     for(int i=1; i<=n; i++){
         memset(visited, 0, sizeof(visited));
-        //fill(&visited[0],&visited[0]+10004 , 0);
-        visited[i] =1;
-        result[i]=dfs(i);
-        mc = max(mc, result[i]);
+        result[i]= dfs(i);
+        mx= max(mx, result[i]);
     }
 
     for(int i=1; i<=n; i++){
-        if(mc == result[i]) cout << i << " ";
+        if(mx==result[i]){
+            cout << i << " ";
+        }
     }
-    
-    return 0;
 }
