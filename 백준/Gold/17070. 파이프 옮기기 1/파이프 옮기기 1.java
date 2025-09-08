@@ -12,7 +12,7 @@ public class Main
     
     static void dfs(int y, int x, int dir){
         
-        if(y == n-1 && x == n-1 ){
+        if(y == n-1 && x == n-1 ){ // (n-1, n-1) 방문했다는 것은 도착했다는 것.
             count++;
             return;
         }
@@ -22,9 +22,11 @@ public class Main
             int nx = x + dx[d];
             
             if( ny < 0 || nx < 0 || ny >= n || nx >= n ) continue; // 범위 밖 불가
-            if( map[ny][nx] == 1 ) continue; // 벽 이동 불가
-            if( (dir == 0 && d == 1)  || (dir == 1 && d == 0)) continue; // 가로 -> 세로 이동 불가, 세로 -> 가로 이동 불가
-            if( d == 2 && ( map[ny-1][nx] == 1 || map[ny][nx - 1] == 1 ))  continue; //대각선일때 회전할 공간 이 벽이면 긁으므로 불가
+            if( map[ny][nx] == 1 ) continue;   // 벽 이동 불가
+            if( dir == 0 && d == 1 ) continue; // 가로 -> 세로 이동 불가
+            if( dir == 1 && d == 0 ) continue; // 세로 -> 가로 이동 불가
+            // 대각선일 때 회전할 공간이 벽이면 긁으므로 불가
+            if( d == 2 && ( map[ny-1][nx] == 1 || map[ny][nx - 1] == 1 )) continue; 
             
             dfs(ny, nx, d);
         }
