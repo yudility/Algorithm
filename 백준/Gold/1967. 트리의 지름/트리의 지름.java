@@ -1,0 +1,63 @@
+import java.util.*;
+import java.io.*;
+
+public class Main
+{
+    static int n;
+    static int answer = -1;
+    static boolean[] visited;
+
+    static class Edge{
+        int to;
+        int weight;
+        
+        Edge(int to, int weight){
+            this.to = to;
+            this.weight = weight;
+        }
+        
+    }
+    
+    static void dfs(int now, List<List<Edge>> adj, int weight){
+        visited[now] = true;
+        answer = Math.max(answer, weight);
+        
+        for (Edge edge : adj.get(now)) {
+            if (!visited[edge.to]) {
+                dfs(edge.to, adj, weight + edge.weight);
+            }
+        }
+        
+    }
+    
+	public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        n = Integer.parseInt(br.readLine());
+        
+
+        List<List<Edge>> adj = new ArrayList<>();
+
+        // 초기화
+        for (int i = 0; i <= n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for(int i = 1; i<= n-1; i++){
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int f = Integer.parseInt(st.nextToken());
+            int t = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
+
+            adj.get(f).add(new Edge(t, w));
+            adj.get(t).add(new Edge(f, w));
+        }
+        
+        for(int i=1; i<=n; i++){
+            visited = new boolean[n+1];
+            dfs(i, adj, 0);
+        }
+
+        System.out.println(answer);
+	}
+}
