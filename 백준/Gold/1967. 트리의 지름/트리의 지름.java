@@ -5,6 +5,7 @@ public class Main
 {
     static int n;
     static int answer = -1;
+    static int findNode;
     static boolean[] visited;
 
     static class Edge{
@@ -15,26 +16,27 @@ public class Main
             this.to = to;
             this.weight = weight;
         }
-        
     }
     
     static void dfs(int now, List<List<Edge>> adj, int weight){
         visited[now] = true;
-        answer = Math.max(answer, weight);
+        if(weight > answer){
+            findNode = now;
+            answer = weight;
+        }
         
-        for (Edge edge : adj.get(now)) {
+        for(int i=0; i<adj.get(now).size(); i++) {
+            Edge edge = adj.get(now).get(i);
             if (!visited[edge.to]) {
                 dfs(edge.to, adj, weight + edge.weight);
             }
         }
-        
     }
     
 	public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
         n = Integer.parseInt(br.readLine());
-        
 
         List<List<Edge>> adj = new ArrayList<>();
 
@@ -53,10 +55,13 @@ public class Main
             adj.get(t).add(new Edge(f, w));
         }
         
-        for(int i=1; i<=n; i++){
-            visited = new boolean[n+1];
-            dfs(i, adj, 0);
-        }
+        
+        visited = new boolean[n+1];
+        dfs(1, adj, 0);
+        
+        visited = new boolean[n+1];
+        dfs(findNode, adj, 0);
+        
 
         System.out.println(answer);
 	}
